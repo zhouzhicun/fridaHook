@@ -31,6 +31,10 @@ function showStacks() {
     Exception.$dispose();
 }
 
+
+
+
+
 //工具相关函数 
 var base64EncodeChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
     base64DecodeChars = new Array((-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), (-1), 62, (-1), (-1), (-1), 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, (-1), (-1), (-1), (-1), (-1), (-1), (-1), 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, (-1), (-1), (-1), (-1), (-1), (-1), 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, (-1), (-1), (-1), (-1), (-1));
@@ -262,6 +266,8 @@ function hook_encrypt() {
     Java.perform(function () {
 
         var secretKeySpec = Java.use('javax.crypto.spec.SecretKeySpec');
+
+        // public SecretKeySpec(byte[] key, String algorithm) {}
         secretKeySpec.$init.overload('[B', 'java.lang.String').implementation = function (a, b) {
             showStacks();
             var result = this.$init(a, b);
@@ -272,6 +278,8 @@ function hook_encrypt() {
         }
 
         var DESKeySpec = Java.use('javax.crypto.spec.DESKeySpec');
+
+        // public DESKeySpec(byte[] key) throws InvalidKeyException 
         DESKeySpec.$init.overload('[B').implementation = function (a) {
             showStacks();
             var result = this.$init(a);
@@ -282,6 +290,7 @@ function hook_encrypt() {
             return result;
         }
 
+        // public DESKeySpec(byte[] key, int offset) throws InvalidKeyException 
         DESKeySpec.$init.overload('[B', 'int').implementation = function (a, b) {
             showStacks();
             var result = this.$init(a, b);
@@ -293,6 +302,8 @@ function hook_encrypt() {
         }
 
         var mac = Java.use('javax.crypto.Mac');
+
+        // public static final Mac getInstance(String algorithm)
         mac.getInstance.overload('java.lang.String').implementation = function (a) {
             showStacks();
             var result = this.getInstance(a);
@@ -300,18 +311,24 @@ function hook_encrypt() {
             console.log("算法名：" + a);
             return result;
         }
+
+        // public final void update(byte[] input) throws IllegalStateException 
         mac.update.overload('[B').implementation = function (a) {
             //showStacks();
             this.update(a);
             console.log("======================================");
             console.log("update:" + bytesToString(a))
         }
+
+        // public final void update(byte[] input, int offset, int len)
         mac.update.overload('[B', 'int', 'int').implementation = function (a, b, c) {
             //showStacks();
             this.update(a, b, c)
             console.log("======================================");
             console.log("update:" + bytesToString(a) + "|" + b + "|" + c);
         }
+
+        // public final byte[] doFinal() throws IllegalStateException 
         mac.doFinal.overload().implementation = function () {
             //showStacks();
             var result = this.doFinal();
@@ -321,6 +338,8 @@ function hook_encrypt() {
             console.log("doFinal结果: |base64  :" + bytesToBase64(result));
             return result;
         }
+
+        // public final byte[] doFinal(byte[] input) throws IllegalStateException
         mac.doFinal.overload('[B').implementation = function (a) {
             //showStacks();
             var result = this.doFinal(a);
@@ -334,30 +353,40 @@ function hook_encrypt() {
         }
 
         var md = Java.use('java.security.MessageDigest');
+
+        // public static MessageDigest getInstance(String algorithm, String provider)
         md.getInstance.overload('java.lang.String', 'java.lang.String').implementation = function (a, b) {
             //showStacks();
             console.log("======================================");
             console.log("算法名：" + a);
             return this.getInstance(a, b);
         }
+
+        // public static MessageDigest getInstance(String algorithm)
         md.getInstance.overload('java.lang.String').implementation = function (a) {
             //showStacks();
             console.log("======================================");
             console.log("算法名：" + a);
             return this.getInstance(a);
         }
+
+        // public void update(byte[] input) 
         md.update.overload('[B').implementation = function (a) {
             //showStacks();
             console.log("======================================");
             console.log("update:" + bytesToString(a))
             return this.update(a);
         }
+
+        // public void update(byte[] input, int offset, int len) 
         md.update.overload('[B', 'int', 'int').implementation = function (a, b, c) {
             //showStacks();
             console.log("======================================");
             console.log("update:" + bytesToString(a) + "|" + b + "|" + c);
             return this.update(a, b, c);
         }
+
+        // public byte[] digest() 
         md.digest.overload().implementation = function () {
             //showStacks();
             console.log("======================================");
@@ -366,6 +395,8 @@ function hook_encrypt() {
             console.log("digest结果 |base64:" + bytesToBase64(result));
             return result;
         }
+
+        // public byte[] digest(byte[] input) 
         md.digest.overload('[B').implementation = function (a) {
             //showStacks();
             console.log("======================================");
@@ -377,7 +408,10 @@ function hook_encrypt() {
             return result;
         }
 
+        
         var ivParameterSpec = Java.use('javax.crypto.spec.IvParameterSpec');
+
+        // public IvParameterSpec(byte[] initialization_vector) 
         ivParameterSpec.$init.overload('[B').implementation = function (a) {
             //showStacks();
             var result = this.$init(a);
@@ -388,6 +422,8 @@ function hook_encrypt() {
         }
 
         var cipher = Java.use('javax.crypto.Cipher');
+
+         //javax.crypto.Cipher: public static final Cipher  getInstance(String transformation)    throws NoSuchAlgorithmException, NoSuchPaddingException
         cipher.getInstance.overload('java.lang.String').implementation = function (a) {
             //showStacks();
             var result = this.getInstance(a);
@@ -395,6 +431,8 @@ function hook_encrypt() {
             console.log("模式填充:" + a);
             return result;
         }
+
+        //javax.crypto.Cipher: public final void init(int operation_mode, Key security_key) throws InvalidKeyException
         cipher.init.overload('int', 'java.security.Key').implementation = function (a, b) {
             //showStacks();
             var result = this.init(a, b);
@@ -411,6 +449,8 @@ function hook_encrypt() {
             console.log("init key:" + "|Hex密钥:" + bytesToHex(bytes_key));
             return result;
         }
+
+         //javax.crypto.Cipher: public final void init(int operation_mode, Certificate certificate)
         cipher.init.overload('int', 'java.security.cert.Certificate').implementation = function (a, b) {
             //showStacks();
             var result = this.init(a, b);
@@ -425,6 +465,8 @@ function hook_encrypt() {
 
             return result;
         }
+
+         // public final void init(int operation_mode, Key key, AlgorithmParameterSpec algorithmParameterSpec)
         cipher.init.overload('int', 'java.security.Key', 'java.security.spec.AlgorithmParameterSpec').implementation = function (a, b, c) {
             //showStacks();
             var result = this.init(a, b, c);
@@ -443,6 +485,8 @@ function hook_encrypt() {
 
             return result;
         }
+
+         // public final void init(int operation_mode, Certificate certificate, SecureRandom secureRandom)
         cipher.init.overload('int', 'java.security.cert.Certificate', 'java.security.SecureRandom').implementation = function (a, b, c) {
             //showStacks();
             var result = this.init(a, b, c);
@@ -454,6 +498,8 @@ function hook_encrypt() {
             }
             return result;
         }
+
+         // public final void init(int operation_mode, Key security_key, SecureRandom secureRandom) 
         cipher.init.overload('int', 'java.security.Key', 'java.security.SecureRandom').implementation = function (a, b, c) {
             //showStacks();
             var result = this.init(a, b, c);
@@ -469,6 +515,8 @@ function hook_encrypt() {
             console.log("init key:" + "|Hex密钥:" + bytesToHex(bytes_key));
             return result;
         }
+
+        // public final void init(int operation_mode, Key security_key, AlgorithmParameters algorithmParameters) 
         cipher.init.overload('int', 'java.security.Key', 'java.security.AlgorithmParameters').implementation = function (a, b, c) {
             //showStacks();
             var result = this.init(a, b, c);
@@ -484,6 +532,8 @@ function hook_encrypt() {
             console.log("init key:" + "|Hex密钥:" + bytesToHex(bytes_key));
             return result;
         }
+
+        // public final void init(int operation_mode, Key security_key, AlgorithmParameters algorithmParameters,SecureRandom secureRandom) 
         cipher.init.overload('int', 'java.security.Key', 'java.security.AlgorithmParameters', 'java.security.SecureRandom').implementation = function (a, b, c, d) {
             //showStacks();
             var result = this.init(a, b, c, d);
@@ -499,6 +549,8 @@ function hook_encrypt() {
             console.log("init key:" + "|Hex密钥:" + bytesToHex(bytes_key));
             return result;
         }
+
+         //public final void init(int operation_mode, Key security_key, AlgorithmParameterSpec algorithmParameterSpec,SecureRandom secureRandom) 
         cipher.init.overload('int', 'java.security.Key', 'java.security.spec.AlgorithmParameterSpec', 'java.security.SecureRandom').implementation = function (a, b, c, d) {
             //showStacks();
             var result = this.init(a, b, c, d);
@@ -515,6 +567,7 @@ function hook_encrypt() {
             return result;
         }
 
+        // public final byte[] update(byte[] input) 
         cipher.update.overload('[B').implementation = function (a) {
             //showStacks();
             var result = this.update(a);
@@ -522,6 +575,8 @@ function hook_encrypt() {
             console.log("update:" + bytesToString(a));
             return result;
         }
+
+        // public final byte[] update(byte[] input, int inputOffset, int inputLen) 
         cipher.update.overload('[B', 'int', 'int').implementation = function (a, b, c) {
             //showStacks();
             var result = this.update(a, b, c);
@@ -529,6 +584,8 @@ function hook_encrypt() {
             console.log("update:" + bytesToString(a) + "|" + b + "|" + c);
             return result;
         }
+
+        // public final byte[] doFinal() 
         cipher.doFinal.overload().implementation = function () {
             //showStacks();
             var result = this.doFinal();
@@ -551,6 +608,8 @@ function hook_encrypt() {
         }
 
         var x509EncodedKeySpec = Java.use('java.security.spec.X509EncodedKeySpec');
+
+         // public X509EncodedKeySpec(byte[] encoded_key) 
         x509EncodedKeySpec.$init.overload('[B').implementation = function (a) {
             //showStacks();
             var result = this.$init(a);
@@ -560,6 +619,8 @@ function hook_encrypt() {
         }
 
         var rSAPublicKeySpec = Java.use('java.security.spec.RSAPublicKeySpec');
+
+        // public RSAPublicKeySpec(BigInteger modulus, BigInteger public_exponent) 
         rSAPublicKeySpec.$init.overload('java.math.BigInteger', 'java.math.BigInteger').implementation = function (a, b) {
             //showStacks();
             var result = this.$init(a, b);
@@ -571,6 +632,8 @@ function hook_encrypt() {
         }
 
         var KeyPairGenerator = Java.use('java.security.KeyPairGenerator');
+
+        // public KeyPair generateKeyPair() 
         KeyPairGenerator.generateKeyPair.implementation = function () {
             //showStacks();
             var result = this.generateKeyPair();
@@ -584,6 +647,7 @@ function hook_encrypt() {
             return result;
         }
 
+        // public final KeyPair genKeyPair() 
         KeyPairGenerator.genKeyPair.implementation = function () {
             //showStacks();
             var result = this.genKeyPair();
