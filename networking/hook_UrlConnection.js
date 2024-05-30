@@ -1,4 +1,5 @@
 function main(){
+    
     Java.perform(function(){
         var URL = Java.use('java.net.URL')
         URL.$init.overload('java.lang.String').implementation = function(urlstr){

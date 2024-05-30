@@ -1,15 +1,3 @@
-// 样本：墨迹天气，com.moji.mjweather
-// so库：
-// -f 包名: spawn启动; 
-// -N 包名: attch启动。 
-// frida -U -f com.jianshu.haruki -l hook_okhttp3.js
-
-/**
- * jnitarce使用格式：jnitrace -l so名 包名
- * jnitrace -l libzxprotect.so com.jianshu.haruki
- */
-
-
 function hook_okhttp3() {
     Java.perform(function() {
         var ByteString = Java.use("com.android.okhttp.okio.ByteString");
@@ -109,55 +97,6 @@ function hook_okhttp3() {
     });
 }
 
-//setImmediate(hook_okhttp3)
-
-
-
-   
-function hook_newCall(){
-   
-    Java.perform(function() {
-        var OkHttpClient = Java.use("okhttp3.OkHttpClient")
-        OkHttpClient.newCall.implementation = function (request) {
-            var result = this.newCall(request)
-            console.log(request.toString())
-            return result
-        };
-    
-    });
-}
-
-//setImmediate(hook_newCall)
-
-
-
-
-function hook_connection() {
-
-    Java.perform(function(){
-        var URL = Java.use('java.net.URL')
-        URL.$init.overload('java.lang.String').implementation = function(urlstr){
-            console.log('url => ',urlstr)
-            var result = this.$init(urlstr)
-            return result
-        }
-        URL.openConnection.overload().implementation = function(){
-            
-            var result = this.openConnection()
-            console.log('openConnection() returnType =>',result.$className)
-            return result
-        }
-        var HttpURLConnectionImpl = Java.use('com.android.okhttp.internal.huc.HttpURLConnectionImpl')
-        HttpURLConnectionImpl.setRequestProperty.implementation = function(key,value){
-            
-            var result = this.setRequestProperty(key,value)
-            console.log('setRequestProperty => ',key,':',value)
-            return result
-        }
-    })
-}
-
-setImmediate(hook_connection)
-
+setImmediate(hook_okhttp3)
 
 

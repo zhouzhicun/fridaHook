@@ -5,6 +5,8 @@ function jhexdump(array) {
     //console.log(hexdump(ptr, { offset: off, length: len, header: false, ansi: false }));
     console.log(hexdump(ptr, { offset: 0, length: array.length, header: false, ansi: false }));
 }
+
+
 function hookAddress(){
     Java.perform(function(){
         // java.net.InetSocketAddress.InetSocketAddress(java.net.InetAddress, int)

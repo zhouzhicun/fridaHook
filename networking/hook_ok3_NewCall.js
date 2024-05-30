@@ -1,4 +1,4 @@
-function main(){
+function hook_newCall(){
    
     Java.perform(function() {
         var OkHttpClient = Java.use("okhttp3.OkHttpClient")
@@ -12,4 +12,4 @@ function main(){
     });
 }
 
-setImmediate(main)
+setImmediate(hook_newCall)

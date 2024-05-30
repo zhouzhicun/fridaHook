@@ -5,15 +5,11 @@
 // frida -U -f com.moji.mjweather -l hook_so.js
 
 
-
-
 function hookSo() {
-
 
 	var soName = 'libzxprotect.so'
     let base_addr = Module.findBaseAddress(soName);
-    // console.log(Object.prototype.toString.call(base_addr));
-    
+
     Interceptor.attach(base_addr.add(0xC240), {
         onEnter: function(args) {
             console.log(`onEnter Java_com_zx_a_I8b7_c3_a__ arg0:${args[0]}`);
@@ -49,7 +45,7 @@ function hookSo() {
 
 setImmediate(function() {
     
-    //延迟1秒调用Hook方法
+    //延迟5秒调用Hook方法
     setTimeout(hookSo, 5000);
 });
 

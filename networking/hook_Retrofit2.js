@@ -1,4 +1,5 @@
-function hookbaseurl (){
+function hookbaseurl() {
+
     Java.perform(function(){
         Java.use("retrofit2.Retrofit$Builder").baseUrl.overload('java.lang.String').implementation = function(str){
             console.log("Entering 1")
@@ -17,7 +18,8 @@ function hookbaseurl (){
 }
 
 
-function hook_DailyNews(){
+function hook_DailyNews() {
+
     Java.perform(function(){
         console.log("Entering java perform ")
         Java.use("ganhuo.ly.com.ganhuo.mvp.entity.DailyNews").getDailyTitle.implementation = function(){
@@ -28,4 +30,6 @@ function hook_DailyNews(){
         }
     })
 }
+
+
 setImmediate(hookbaseurl)

@@ -5,6 +5,11 @@
 // -N 包名: attch启动。 
 // frida -U -f com.moji.mjweather -l example1.js
 
+/**
+ * jnitarce使用格式：jnitrace -l so名 包名
+ * jnitrace -l libzxprotect.so com.jianshu.haruki
+ */
+
 
 function hookJava() {
 
@@ -42,7 +47,6 @@ function hookJava() {
         };
 
 	});
-
 
 }
 
