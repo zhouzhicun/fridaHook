@@ -50,5 +50,53 @@ function hookJava() {
 
 }
 
-setImmediate(hookJava)
+function hook_activity() {
+	
+	Java.perform(function () {
+		var Activity = Java.use("android.app.Activity");
+
+		Activity.onCreate.overload('android.os.Bundle').implementation = function (bundle) {
+			console.log("Activity.onCreate() called ==>" + this.getClass().getName());
+			this.onCreate(bundle);
+		};
+
+		Activity.onStart.implementation = function () {
+			console.log("Activity.onStart() called ==>" + this.getClass().getName());
+			this.onStart();
+		};
+
+		Activity.onResume.implementation = function () {
+			console.log("Activity.onResume() called ==>" + this.getClass().getName());
+			this.onResume();
+		};
+
+		Activity.onPause.implementation = function () {
+			console.log("Activity.onPause() called ==>" + this.getClass().getName());
+			this.onPause();
+		};
+
+		Activity.onStop.implementation = function () {
+			console.log("Activity.onStop() called ==>" + this.getClass().getName());
+			this.onStop();
+		};
+
+		Activity.onDestroy.implementation = function () {
+			console.log("Activity.onDestroy() called ==>" + this.getClass().getName());
+			this.onDestroy();
+		};
+
+		Activity.onRestart.implementation = function () {
+			console.log("Activity.onRestart() called ==>" + this.getClass().getName());
+			this.onRestart();
+		};
+	});
+}
+
+
+
+//setImmediate(hookJava)
+
+setImmediate(hook_activity)
+
+
 
