@@ -1,5 +1,4 @@
 
-
 查看样本包名：MT 或者 vscode的frida Workbench插件
 样本：com.jianshu.haruki
 
@@ -14,6 +13,3 @@ jnitrace -l libzxprotect.so com.jianshu.haruki
 
 objection批量hook：
 objection -g com.jianshu.haruki explore -c "SocketInit.txt"
-
-
-
