@@ -2,12 +2,20 @@
 /**
 参考文档：https://bbs.kanxue.com/thread-281584.htm
 
-可过frida检测，
-但是hook java层的函数，仍会被检测到，导致frida进程 Process terminated挂掉，
+可过frida检测，但是hook java层的函数，仍会被检测到，导致frida进程 Process terminated挂掉，
 原因：
 立即hook java会早于hook native，导致java层的hook函数被检测到，从而导致frida进程挂掉。
 解决方案：
 延迟几秒后，在Hook java层的函数。 例如 setTimeout(hook_activity, 3000)
+
+
+通杀使用libmsaoaidsec.so防护的所有App, 包括：
+哔哩哔哩  tv.danmaku.bili
+小红书    com.xingin.xhs
+爱奇艺    com.qiyi.video
+安居客    com.anjuke.android.app
+携程旅行  ctrip.android.view
+
 
  */
 
@@ -69,9 +77,7 @@ function hook_dlopen() {
 
 // 创建虚假pthread_create
 var fake_pthread_create = create_fake_pthread_create()
-var dlopen_interceptor = hook_dlopen()
-
-
+hook_dlopen()
 
 
 

@@ -1,3 +1,23 @@
+/**
+ * 参考文档：https://bbs.kanxue.com/thread-278145.htm
+ * 文章介绍常见反调试方案，以及如何绕过。
+ * 1.检测文件名（改名）、端口名27042（改端口）、双进程保护（spawn启动）
+ * 2.检测D-Bus
+ * 3.检测/proc/pid/maps依赖文件
+ * 4.检测/proc/pid/tast下线程、fd目录下打开文件
+ * 5.frida-server启动
+ * 6.直接调用openat的syscall的检测在text节表中搜索frida-gadget.so / frida-agent.so字符串，
+ * 避免了hook libc来anti-anti的方法；
+ * 7.从inlinehook角度检测frida
+ *  
+ */
+
+
+/**
+ * 注意：
+ * 下面代码对于 libmsaoaidsec.so 已失效，仅做学习~~~
+ */
+
 function replace_str() {
     var pt_strstr = Module.findExportByName("libc.so", 'strstr');
     var pt_strcmp = Module.findExportByName("libc.so", 'strcmp');
