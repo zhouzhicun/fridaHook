@@ -1,6 +1,9 @@
 
-查看样本包名：MT 或者 vscode的frida Workbench插件
-样本：com.jianshu.haruki
+查看样本包名：
+1.命令：frida-ps -Uai
+2.MT App 
+3.vscode的frida Workbench插件
+
 
 -f 包名: spawn启动; 
 -N 包名: attch启动。 

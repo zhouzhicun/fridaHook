@@ -1,36 +1,9 @@
 
-// 样本：墨迹天气，com.moji.mjweather
-// so库：
-// -f 包名: spawn启动; 
-// -N 包名: attch启动。 
-// frida -U -f com.moji.mjweather -l example1.js
 
-/**
- * jnitarce使用格式：jnitrace -l so名 包名
- * jnitrace -l libzxprotect.so com.jianshu.haruki
- */
-
-
-function hookJava() {
+function hook_java() {
 
 	//hook java方法
 	Java.perform(function () {
-
-		
-	    var Activity = Java.use("android.app.Activity");
-
-		//hook java重载方法
-	    Activity.onCreate.overload('android.os.Bundle').implementation = function (bundle) {
-	        console.log("Activity.onCreate() has been called!");
-	        this.onCreate(bundle);
-	    };
-
-		//hook java方法
-		Activity.onStart.implementation = function() {
-			console.log("Activity.onStart() has been called!");
-			this.onStart();
-		}
-
 
         let r = Java.use("com.zx.a.I8b7.r");
         r["a"].overload('java.lang.String', 'java.lang.String', 'java.lang.String').implementation = function (str, str2, str3) {
@@ -49,6 +22,11 @@ function hookJava() {
 	});
 
 }
+
+//setImmediate(hook_java)
+
+
+
 
 function hook_activity() {
 	
@@ -92,11 +70,10 @@ function hook_activity() {
 	});
 }
 
-
-
-//setImmediate(hookJava)
-
 setImmediate(hook_activity)
+
+
+
 
 
 
