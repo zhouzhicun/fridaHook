@@ -40,12 +40,8 @@ function hookSo() {
 
 }
 
+//立即执行
 //setImmediate(hookSo);
 
-
-setImmediate(function() {
-    
-    //延迟5秒调用Hook方法
-    setTimeout(hookSo, 5000);
-});
-
+//延迟5秒执行
+setTimeout(hookSo, 5000);

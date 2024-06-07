@@ -219,20 +219,21 @@ function hook_onClick() {
 
 function hook_WebView() {
     
-    Java.perform(function () {
+    //不同App，WebView的方法可能不一样，从而导致hook失败，这里只是一个示例
+    // Java.perform(function () {
 
-        var WebView = Java.use("android.webkit.WebView");
+    //     var WebView = Java.use("android.webkit.WebView");
 
-        WebView.loadUrl.overload('java.lang.String').implementation = function (url) {
-            console.log("WebView.loadUrl() called ==>" + this.getClass().getName());
-            this.loadUrl();
-        };
+    //     WebView.loadUrl.overload('java.lang.String').implementation = function (url) {
+    //         console.log("WebView.loadUrl() called ==>" + this.getClass().getName());
+    //         this.loadUrl();
+    //     };
 
-        WebView.loadUrl.overload('java.lang.String', 'java.util.Map').implementation = function (url, params) {
-            console.log("WebView.loadUrl() called ==>" + this.getClass().getName());
-            this.loadUrl();
-        };
-    });
+    //     WebView.loadUrl.overload('java.lang.String', 'java.util.Map').implementation = function (url, params) {
+    //         console.log("WebView.loadUrl() called ==>" + this.getClass().getName());
+    //         this.loadUrl();
+    //     };
+    // });
 }
 
 
@@ -255,15 +256,3 @@ function main() {
 
 main()
 
-
-
-/**
- 
-frida -U -f com.xingin.xhs -l anti_open_msaoaidsec.js 
-
-frida -U -f com.qiyi.video -l anti_open_msaoaidsec.js 
-
-frida -U -f tv.danmaku.bili -l anti_open_msaoaidsec.js 
-
-
- */
