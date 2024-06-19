@@ -10,6 +10,46 @@ https://www.yuque.com/lilac-2hqvv/hgwa9g/phdmpe?#%20%E3%80%8A%E5%A4%84%E7%90%86%
  */
 
 
+
+/////////////////////////////////// dump指定so 或者指定so的导出符号  ///////////////////////////////////////
+
+var bundleName = "com.nike.omega"
+var savePath = `/data/data/${bundleName}/`
+
+
+//dump libc.so的导出函数
+function dumpSymbol(soName){
+    var exports = Module.enumerateExportsSync(soName + ".so");
+    var file_path = savePath + soName + "_symbols.log";
+    var file_handle = new File(file_path, "a+");
+    for(var i = 0; i < exports.length; i++) {
+        file_handle.write(exports[i].name + ": " + (exports[i].address)+"\n");
+    }
+    file_handle.flush();
+    file_handle.close();
+    console.log("[dump]:", file_path);
+}
+
+//dump 指定so库, 并保存到/data/data/bundleName/目录下
+function dumpSo(name){
+    var libSO = Process.getModuleByName(name);
+    var file_path = savePath + libSO.base + "_" + libSO.base.add(libSO.size) + ".bin";
+    var file_handle = new File(file_path, "wb");
+    if (file_handle && file_handle != null) {
+        Memory.protect(ptr(libSO.base), libSO.size, 'rwx');
+        var libso_buffer = ptr(libSO.base).readByteArray(libSO.size);
+        file_handle.write(libso_buffer);
+        file_handle.flush();
+        file_handle.close();
+        console.log("[dump]:", file_path);
+    }
+}
+
+
+////////////////////////////////////// dump某块内存  ///////////////////////////////////////////////////
+
+
+//dump 指定so库中的某块内存, 并打印到日志中
 function dump_memory(soName, offset, length) {
     var base_addr = Module.findBaseAddress(soName);
     var dump_addr = base_addr.add(offset);

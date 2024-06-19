@@ -45,13 +45,16 @@ function dumpTemplate(){
         Interceptor.attach(real_addr, {
             onEnter: function (args) {
 
-
                 console.log("打印参数~~~")
 
                 // symbols
-                dumpSymbol("libc.so")
+                dumpSymbol("libc")
+                dumpSymbol("libart")
+                dumpSymbol("libandroid")
+
                 // target SO
                 dumpSo(targetSO)
+
                 // wait
                 Thread.sleep(10)
                 // stop process
@@ -92,8 +95,10 @@ function dumpSo(name){
     }
 }
 
+var bundleName = "com.nike.omega"
+var savePath = `/data/data/${bundleName}/`
 
-var savePath = "/data/data/com.nike.omega/"
+
 var targetSO = "libtiger_tally.so"
 var targetFunc = 0x5c5ad
 console.log("Process ID:", Process.id)
@@ -102,4 +107,4 @@ console.log("Process ID:", Process.id)
 //dumpTemplate()
 
 //延迟3s执行，因为so加载没那么及时~
-setTimeout(hookGenericNt3, 3000)
+setTimeout(dumpTemplate, 3000)
