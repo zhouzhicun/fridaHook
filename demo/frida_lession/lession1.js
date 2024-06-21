@@ -1,6 +1,7 @@
 function hook_a() {
 
     Java.perform(function () {
+        
         let LoginActivity = Java.use("com.github.lastingyang.androiddemo.Activity.LoginActivity");
         LoginActivity["a"].overload('[B').implementation = function (bArr) {
             console.log(`LoginActivity.a is called: bArr=${bArr}`);
